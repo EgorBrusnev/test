@@ -1,0 +1,18 @@
+{
+    "friendList": {
+        "searchFriend": "Поиск друга"
+    },
+    "login": {
+        "username": "Логин",
+        "name": "Имя пользователя",
+        "password": "Пароль",
+        "repeatPassword": "Повторить пароль",
+        "registration": "Регистрация",
+        "signIn": "Войти",
+        "signUp": "Зарегистрироваться"
+    },
+    "chat": {
+        "typeMessage": "Наберите сообщение...",
+        "emptyMessage": "Здесь пока нет сообщений"
+    }
+}
