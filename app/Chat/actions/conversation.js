@@ -30,6 +30,10 @@ const onStickersFetched = (stickers) => ({
 	type: types.STICKERS_SUCCESS,
 	stickers
 });
+const onMessageError = (error) => ({
+	type: types.MESSAGE_ERROR,
+	error
+})
 
 export const fetchOneConversation = (id) => (dispatch) => {
 	dispatch(onConversationLoading());
@@ -37,7 +41,7 @@ export const fetchOneConversation = (id) => (dispatch) => {
 		.then(data => {
 			dispatch(onConversationFetched(data));
 		}).catch(err => {
-			console.log(err);
+			console.log("ERRORROR:", err);
 		})
 
 };
@@ -58,6 +62,9 @@ export const sendMessage = (from, messageBody, conversationId, to, isConversatio
 			sendXMPPMessage(data, to);
 			dispatch(onMessageSent(data.newMessage));
 		}
+	}).catch(error => {
+		console.log(error);
+		dispatch(onMessageError({ message: error.message }));
 	});
 };
 

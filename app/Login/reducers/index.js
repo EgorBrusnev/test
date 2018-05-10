@@ -14,6 +14,7 @@ export const fetchSignInResult = (state = initialState, action) => {
 			isAuthorized: true
 		};
 	case types.FAILED_SIGN_IN:
+		console.log("FAILED_SIGNIN")
 		return {
 			...state,
 			...action.response,

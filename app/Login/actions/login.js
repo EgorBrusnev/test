@@ -42,6 +42,7 @@ export const fetchSignIn = (user, token) => (dispatch) => {
 		})
 		.catch(error => {
 			console.log(error);
+			dispatch(onFailedSignIn({ success: false, error: { errmsg: error.message } }));
 		});
 };
 

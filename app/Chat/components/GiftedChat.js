@@ -10,6 +10,7 @@ import { indicatorStyles } from "../../styles";
 import _ from "lodash";
 import I18n from "../../utils/i18n";
 import { translations } from "../../Constants";
+import Toast from "../../utils/PlatformToast";
 
 
 class Chat extends Component {
@@ -31,6 +32,9 @@ class Chat extends Component {
 	}
 
 	componentWillReceiveProps(props) {
+		if (!_.isEmpty(props.error)) {
+			Toast(props.error.message);
+		}
 		this.recipient = props.currentConversation.members.filter((x) => { return x._id !== this.props.user._id; });
 		if (this.recipient.length === 0) this.recipient = [this.props.user];
 	}

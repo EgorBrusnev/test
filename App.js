@@ -9,10 +9,6 @@ import axios from "axios";
 import { baseUrl } from "./app/Constants";
 import configStore from "./app/configStore";
 
-
-
-
-
 const { store, persistor } = configStore();
 
 export default class App extends Component {

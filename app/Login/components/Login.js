@@ -56,6 +56,7 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(props) {
+        console.log("WILLRECEIVEPROPS", props);
         var response = props.response;
         var credits = []
         var username = "";
@@ -68,6 +69,7 @@ class Login extends Component {
             connect(username, password);
             navigator.go(this, navigator.routes.FRIEND_LIST, true);
         } else if (response.success === false) {
+            console.log("ERRORMESSASGE", response.error.errmsg);
             Toast(response.error.errmsg);
         }
     }

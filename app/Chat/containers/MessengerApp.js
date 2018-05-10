@@ -20,7 +20,8 @@ const mapStateToProps = (state, props) => {
 		isConversationSuccess: state.chat.isConversationSuccess,
 		isStickersLoading: state.chat.isStickersLoading,
 		isStickersSuccess: state.chat.isStickersSuccess,
-		stickers: state.chat.stickers
+		stickers: state.chat.stickers,
+		error: state.chat.error
 	});
 };
 
