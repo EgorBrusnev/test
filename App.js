@@ -20,7 +20,6 @@ export default class App extends Component {
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
                     <Root />
-                    
                 </PersistGate>
             </Provider>
         );
