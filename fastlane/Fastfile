@@ -1,0 +1,36 @@
+default_platform :android
+
+#before_all do
+#    update_fastlane
+#    yarn(
+#        command: "install",
+#        package_path: "./package.json"
+#    )
+#end
+
+
+platform :android do
+    lane :beta do
+        gradle(task: "increaseVersionCode", project_dir: "./android/")
+        gradle(task: "assemble", build_type: "release", project_dir: "./android/")
+        hockey(api_token: "8bfcf3bca6324a888c3ca97b395c34d7")
+    end
+
+    lane :beta_commit do
+        #changelog_from_git_commits(path: "./android")
+        log = changelog_from_git_commits
+        hockey(api_token: "79331732875140a998ef48ee410ebc3d", notes: log)
+    end
+end
+
+platform :ios do
+    lane :beta do
+        build_app(scheme: "testApp", project: './ios/testApp.xcodeproj')
+        hockey(api_token: "79331732875140a998ef48ee410ebc3d")
+    end
+end
+
+
+lane :cart do
+    carthage
+end

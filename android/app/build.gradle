@@ -72,6 +72,25 @@ import com.android.build.OutputFile
  * ]
  */
 
+project.ext.react = [
+        entryFile            : "index.js",
+        nodeExecutableAndArgs: hasProperty('NODE_PATH') ? [NODE_PATH] :
+                ["node"],
+        bundleInDebug        : false,
+        bundleInStaging      : true,
+        jsBundleDirDebug     : "$buildDir/intermediates/assets/debug",
+        resourcesDirDebug    : "$buildDir/intermediates/res/merged/debug",
+        jsBundleDirStaging   : "$buildDir/intermediates/assets/staging",
+        resourcesDirStaging  :
+                "$buildDir/intermediates/res/merged/staging",
+        jsBundleDirRelease   : "$buildDir/intermediates/assets/release",
+        resourcesDirRelease  :
+                "$buildDir/intermediates/res/merged/release",
+        devDisabledInDebug   : false,
+        devDisabledInRelease : true,
+        devDisabledInStaging : true
+];
+
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -88,31 +107,40 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
+
+
 android {
     compileSdkVersion 23
     buildToolsVersion '27.0.3'
+
 
     defaultConfig {
         applicationId "com.testapp"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode = Integer.parseInt(VERSION_CODE)
+        versionName = VERSION_NAME
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
         manifestPlaceholders = [HOCKEYAPP_APP_ID: "9b32d377137a4a1781f819c233ac067d"]
     }
-   signingConfigs {
-       release {
-           if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-               storeFile file(MYAPP_RELEASE_STORE_FILE)
-               storePassword MYAPP_RELEASE_STORE_PASSWORD
-               keyAlias MYAPP_RELEASE_KEY_ALIAS
-               keyPassword MYAPP_RELEASE_KEY_PASSWORD
-           }
-       }
-   }
+
+    dexOptions {
+        preDexLibraries false
+        javaMaxHeapSize "8g"
+    }
+
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
     splits {
         abi {
             reset()
@@ -133,7 +161,7 @@ android {
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2]
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
@@ -167,3 +195,17 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+task('increaseVersionCode') << {
+    def versionCode = Integer.parseInt(VERSION_CODE) + 1
+    def versionName = VERSION_NAME.split("\\.")
+    def last = Integer.parseInt(versionName[versionName.length - 1])
+    versionName[versionName.length - 1] = Integer.toString(last + 1)
+    versionName = versionName.join(".")
+
+    ant.propertyfile(file: "../gradle.properties") {
+        entry(key: "VERSION_CODE", value: versionCode)
+        entry(key: "VERSION_NAME", value: versionName)
+    }
+}
+
