@@ -76,6 +76,7 @@ class FriendList extends Component {
 
     componentWillUnmount() {
         disconnect();
+        
     }
 
 
